@@ -10,6 +10,7 @@ import 'package:telekilogram/My_ClassRoom_page.dart';
 import 'package:telekilogram/my_home_page.dart';
 import 'package:telekilogram/login&register/my_Login_Page.dart';
 import 'package:telekilogram/user_profile.dart';
+import 'package:telekilogram/ListPage.dart';
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -134,6 +135,13 @@ class AppNavigationDrawer extends StatelessWidget {
           title: const Text('Dang nhap token'),
           onTap: (){
             Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const LoginPage()));
+          },
+        ),
+        ListTile(
+          leading: const Icon(Icons.bookmark),
+          title: const Text('News'),
+          onTap: (){
+            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const NewsListPage()));
           },
         )
       ],
