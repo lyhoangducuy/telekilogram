@@ -16,4 +16,12 @@ class CartStore {
   static void clear() {
     _items.clear();
   }
+
+  /// ✅ TỔNG TIỀN
+  static double get totalPrice {
+    return _items.fold(
+      0,
+      (sum, item) => sum + item.price,
+    );
+  }
 }

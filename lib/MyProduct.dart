@@ -147,36 +147,167 @@ Widget myItem(Product p) {
 
 
   void _showCart(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      builder: (_) => Container(
-        padding: const EdgeInsets.all(16),
-        height: 400,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Giỏ hàng',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            const Divider(),
-            Expanded(
-              child: CartStore.items.isEmpty
-                  ? const Center(child: Text('Giỏ hàng trống'))
-                  : ListView.builder(
-                      itemCount: CartStore.items.length,
-                      itemBuilder: (context, index) {
-                        final item = CartStore.items[index];
-                        return ListTile(
-                          title: Text(item.title),
-                          trailing: Text('\$${item.price}'),
-                        );
-                      },
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    builder: (_) => StatefulBuilder(
+      builder: (context, setState) {
+        return Container(
+          padding: const EdgeInsets.all(16),
+          height: 400,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Giỏ hàng',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              const Divider(),
+
+              /// DANH SÁCH SẢN PHẨM
+              Expanded(
+                child: CartStore.items.isEmpty
+                    ? const Center(child: Text('Giỏ hàng trống'))
+                    : ListView.builder(
+                        itemCount: CartStore.items.length,
+                        itemBuilder: (context, index) {
+                          final item = CartStore.items[index];
+                          return ListTile(
+                            title: Text(item.title),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  '\$${item.price}',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.delete, color: Colors.red),
+                                  onPressed: () {
+                                    setState(() {
+                                      CartStore.remove(item);
+                                    });
+                                  },
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+              ),
+
+              const Divider(),
+
+              /// TỔNG TIỀN
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Tổng tiền:',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    '\$${CartStore.totalPrice.toStringAsFixed(2)}',
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.red,
                     ),
-            ),
-          ],
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 12),
+
+              /// NÚT XÓA TẤT CẢ
+              Row(
+  children: [
+    Expanded(
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.red,
         ),
+        onPressed: () {
+          setState(() {
+            CartStore.clear();
+          });
+        },
+        child: const Text('Xóa giỏ'),
       ),
-    );
-  }
+    ),
+    const SizedBox(width: 12),
+    Expanded(
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.green,
+        ),
+        onPressed: CartStore.items.isEmpty
+            ? null
+            : () {
+                _fakeCheckout(context, setState);
+              },
+        child: const Text('Thanh toán'),
+      ),
+    ),
+  ],
+),
+
+            ],
+          ),
+        );
+      },
+    ),
+  );
+}
+
+}
+void _fakeCheckout(BuildContext context, StateSetter setState) {
+  showDialog(
+    context: context,
+    builder: (_) => AlertDialog(
+      title: const Text('Xác nhận thanh toán'),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text('Tổng tiền cần thanh toán:'),
+          const SizedBox(height: 8),
+          Text(
+            '\$${CartStore.totalPrice.toStringAsFixed(2)}',
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.red,
+            ),
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          child: const Text('Hủy'),
+          onPressed: () => Navigator.pop(context),
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+          child: const Text('Xác nhận'),
+          onPressed: () {
+            setState(() {
+              CartStore.clear();
+            });
+            Navigator.pop(context); // đóng dialog
+            Navigator.pop(context); // đóng bottom sheet
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('✅ Thanh toán thành công!'),
+                duration: Duration(seconds: 2),
+              ),
+            );
+          },
+        ),
+      ],
+    ),
+  );
 }
