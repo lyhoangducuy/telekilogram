@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:telekilogram/HomePage.dart';
 import 'package:telekilogram/login&register/my_Login_Page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserProfile extends StatelessWidget {
   final Map<String, dynamic> userData;
@@ -168,16 +169,18 @@ class UserProfile extends StatelessWidget {
               const SizedBox(height: 10),
 
               OutlinedButton.icon(
-                icon: const Icon(Icons.logout),
-                label: const Text('Đăng xuất'),
-                onPressed: () {
-                  Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                        builder: (_) => const LoginPage()),
-                    (route) => false,
-                  );
-                },
-              ),
+              icon: const Icon(Icons.logout),
+              label: const Text('Đăng xuất'),
+              onPressed: () async {
+                final prefs = await SharedPreferences.getInstance();
+                await prefs.clear();
+
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (_) => const LoginPage()),
+                  (route) => false,
+                );
+              },
+            ),
             ],
           ),
         ),
