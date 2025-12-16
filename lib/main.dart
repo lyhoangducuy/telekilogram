@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
-import 'Views/Rootscreen.dart';
-void main()=>runApp(MyApp());
+import 'package:telekilogram/HomePage.dart';
+
+void main(){
+  runApp(MyApp());
+}
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Rootscreen(), // chạy màn hình Login khi khởi động app
+      //home:Time(),
+      //home:Number(),
+      home:HomePage(),
     );
   }
 }
