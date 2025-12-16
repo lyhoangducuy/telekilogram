@@ -64,8 +64,17 @@ class _MyProductState extends State<MyProduct> {
     );
   }
 
-  Widget myItem(Product p) {
-    return Card(
+Widget myItem(Product p) {
+  return InkWell(
+    onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => ProductDetails(product: p),
+        ),
+      );
+    },
+    child: Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       elevation: 3,
       child: Column(
@@ -73,11 +82,14 @@ class _MyProductState extends State<MyProduct> {
         children: [
           AspectRatio(
             aspectRatio: 1,
-            child: Image.network(
-              p.image,
-              fit: BoxFit.contain,
-              errorBuilder: (_, __, ___) =>
-                  const Icon(Icons.image_not_supported),
+            child: Hero(
+              tag: 'product-${p.id}', // QUAN TRỌNG
+              child: Image.network(
+                p.image,
+                fit: BoxFit.contain,
+                errorBuilder: (_, __, ___) =>
+                    const Icon(Icons.image_not_supported),
+              ),
             ),
           ),
           Expanded(
@@ -129,8 +141,10 @@ class _MyProductState extends State<MyProduct> {
           )
         ],
       ),
-    );
-  }
+    ),
+  );
+}
+
 
   void _showCart(BuildContext context) {
     showModalBottomSheet(
