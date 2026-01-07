@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1061738469090",
+    "project_id": "bookshopflutter",
+    "storage_bucket": "bookshopflutter.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1061738469090:android:43ac305efb43ccc9baf0bb",
+        "android_client_info": {
+          "package_name": "com.example.bookshop"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCye5kqWtK_twYQR7vfSOXNKr6F73axpEw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
